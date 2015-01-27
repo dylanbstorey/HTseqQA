@@ -1,4 +1,4 @@
-NAME := HTseq_QA
+NAME := HTseqQA
 
 #CC := g++
 #CPP := g++
