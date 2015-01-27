@@ -46,5 +46,5 @@ Passing Reads Filter
 
 TODO:
 ======
-*Add flag and code for producing YAML dumps of the files.
-*Sequence representation proportions and graphs.
+- Add flag and code for producing YAML dumps of the files.
+- Sequence representation proportions and graphs.
