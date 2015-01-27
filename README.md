@@ -18,7 +18,7 @@ Usage:
 
 You can set the phred offset manually :
 
-`./HTseqQA -o 64|33 -i test.fastq.gz`
+`./HTseqQA -o <64|33> -i test.fastq.gz`
 
 The output is a text file with an extension of '.R' and run through R to get your graph out.
 
@@ -49,3 +49,4 @@ TODO:
 ======
 - Add flag and code for producing YAML dumps of the files.
 - Sequence representation proportions and graphs.
+- Clean up the passing reads filter graph so undef isn't 0
