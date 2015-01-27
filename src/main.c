@@ -446,9 +446,12 @@ int passing_reads_size = Passing_Reads.size();
 
 for (int i =0; i < passing_reads_size; ++i){
 	for (int j = 0; j <= args.max_quality_score; ++j){
-
-		
-		value += std::to_string(Passing_Reads[i][j]/read_counter);
+		if (Passing_Reads[i][j] == 0){
+			value+= "NA";
+			}
+		else{
+			value += std::to_string(Passing_Reads[i][j]/read_counter);
+			}
 		x_axis+=std::to_string(i+1);
 		y_axis+=std::to_string(j);
 
@@ -468,7 +471,7 @@ for (int i =0; i < passing_reads_size; ++i){
 			y_axis+=",";
 			x_axis += ",";
 			value+=",";
-			}	
+			}			
 		}
 	}
 
