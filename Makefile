@@ -1,4 +1,4 @@
-NAME := FastQC
+NAME := HTseq_QA
 
 #CC := g++
 #CPP := g++
