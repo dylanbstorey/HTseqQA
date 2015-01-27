@@ -15,8 +15,11 @@ Usage:
 =======
 
 `./HTseqQA <options> -i <incoming file> `
+
 `options available:`
+
 `   -o <int>`
+
 `       Phred offset for the file, optional `
 
 The output is a text file with an extension of '.R' and run through R to get your graph out.
