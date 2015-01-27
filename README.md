@@ -12,16 +12,16 @@ Usage:
 
 Cumulative Quality Scores
 --------------------------
-![Cumulative Quality Scores Graph]()
+![Cumulative Quality Scores Graph](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/C1ln3SF_NIcont_1.cqs.png)
 
 Nucleotide Proportions
 ---------------------------
-![Nucleotide Proportions]()
+![Nucleotide Proportions](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/C1ln3SF_NIcont_1.ntd.png)
 
 Quality Distributions by Position
 ----------------------------------
-![Quality Distributions by Position]()
+![Quality Distributions by Position](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/C1ln3SF_NIcont_1.qbp.png)
 
 Passing Reads Filter
 --------------------
-![Passing Reads Filter]()
+![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/C1ln3SF_NIcont_1.prf.png)
