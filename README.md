@@ -14,13 +14,11 @@ The program will need to have a c++11 compatible compiler. To visualize the grap
 Usage:
 =======
 
-`./HTseqQA <options> -i <incoming file> `
+`./HTseqQA <options> -i <fastq or gzip'd fastq> `
 
-`options available:`
+You can set the phred offset manually :
 
-`   -o <int>`
-
-`       Phred offset for the file, optional `
+`./HTseqQA -o 64|33 -i test.fastq.gz`
 
 The output is a text file with an extension of '.R' and run through R to get your graph out.
 
