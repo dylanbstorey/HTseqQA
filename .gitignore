@@ -1,3 +1,4 @@
 #untracked files
 obj/
 obj/*
+!testing/test.fastq.gz
