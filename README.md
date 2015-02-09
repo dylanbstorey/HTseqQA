@@ -1,6 +1,6 @@
 TODO:
 =====
-OUTPUT TABLES, ADD Rscripts. 
+OUTPUT TABLES, ADD Rscripts. Verify return from the guess offset script.
 
 
 HTseqQA
