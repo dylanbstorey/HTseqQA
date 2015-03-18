@@ -1,6 +1,10 @@
+
 TODO:
-=====
-OUTPUT TABLES, ADD Rscripts. Verify return from the guess offset script.
+======
+- Add flag and code for producing YAML dumps of the files.
+- Sequence representation proportions and graphs.
+- Clean up the passing reads filter graph so undef isn't 0
+
 
 
 HTseqQA
@@ -49,9 +53,3 @@ Passing Reads Filter
 --------------------
 ![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/C1ln3SF_NIcont_1.prf.png)
 
-
-TODO:
-======
-- Add flag and code for producing YAML dumps of the files.
-- Sequence representation proportions and graphs.
-- Clean up the passing reads filter graph so undef isn't 0
