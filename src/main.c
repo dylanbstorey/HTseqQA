@@ -41,7 +41,7 @@ KSEQ_INIT(gzFile,gzread)
 // Our arguments struct
 struct args_t{
 	char* incoming;
-	int offset = 0;
+	int offset = -1;
 	int max_quality_score = -1;
 	/*outputs*/
 
@@ -72,12 +72,12 @@ int get_offset(char* file){
 	while ((l = kseq_read(records)) >= 0 ){
 		std::string quals = records->qual.s;
 		for(std::string::size_type i = 0; i < quals.size(); ++i){
-			if (quals[i] < 59){
+			if (quals[i] < 58){
 				kseq_destroy(records);
 				gzclose(inc);
 				return 33;
 				}
-			else if (quals[i] > 73){
+			else if (quals[i] > 74){
 				kseq_destroy(records);
 				gzclose(inc);
 				return 64;
@@ -104,9 +104,7 @@ while (opt != -1){
 			
 			args.no_suffix = optarg;
 			args.no_suffix = args.no_suffix.substr(0,args.no_suffix.find_first_of("."));
-			
-			args.report = args.no_suffix + ".report.yaml";
-
+	
 			args.R = args.no_suffix + ".R"; // R report
 			
 			args.basename = args.incoming; // basename + no suffix
@@ -135,7 +133,7 @@ if (not args.incoming){
 	exit(200);
 	}
 // Quality Offset Checking
-if (not args.offset){
+if (args.offset == -1){
 	args.offset = get_offset(args.incoming);
 	if (args.offset == -1){
 		std::cerr << "Couldn't guess your offset! use the -o option to set manually" << std::endl;
@@ -200,288 +198,88 @@ for (int i = 0; i < args.max_quality_score+1; ++i){ total_seen+=Quals_Distributi
 
 // My Nucleotide classes
 std::string Nucleotides ("ATGCN");
+std::ofstream cum_quals(args.no_suffix+"_cum_quals.tbl");
+cum_quals << "label\txlabel\tylabel"<<std::endl;
 
-// /*Dump to a YAML*/
-// std::ofstream ReportYAML(args.report);
-// ReportYAML << "---" << std::endl;
-// ReportYAML << "NTs_by_position:"<<std::endl;
-
-// /* Dump our NTs_By_Position structure */
-// std::string Nucleotides ("ATGCN");
-// for (int i = 0; i < NTs_ByPosition.size() ; ++i){
-		
-// 		for (int j =0; j < Nucleotides.size(); ++j){
-// 			if (j == 0){
-// 				ReportYAML << "- - ";
-// 				}
-// 			else{
-// 				ReportYAML << "  - ";
-// 				}
-// 			ReportYAML << (double(NTs_ByPosition[i][Nucleotides[j]])/ read_counter ) << std::endl;
-//  		}
-
-// 	}
-
-// /*Dump total number of reads*/
-// ReportYAML << "number_of_reads: " << read_counter << std::endl;
-
-// /*Dump cumulative quality scores*/
-// ReportYAML << "cumulative_quals:" << std::endl;
-// unsigned long current_seen = 0;
-// float total_seen = 0;
-// for (int i = 0; i < args.max_quality_score+1; ++i){ total_seen+=Quals_Distribution[i];}
-// for (int i = 0; i < args.max_quality_score+1 ; ++i){
-// 	current_seen += Quals_Distribution[i];
-// 	ReportYAML << "- " << double(current_seen)/total_seen << std::endl;
-// 	}
-
-
-// /*Dump our quality scores by position*/
-// ReportYAML<<"quals_by_position:" << std::endl;
-// for (int i = 0; i < Quals_ByPosition.size() ; ++i){	
-// 		for (int j = 0; j < args.max_quality_score+1; ++j){
-// 			if (j == 0){
-// 				ReportYAML << "- - ";
-// 				}
-// 			else{
-// 				ReportYAML << "  - ";
-// 				}
-// 			ReportYAML << (	double(Quals_ByPosition[i][j]) / read_counter ) << std::endl;
-//  		}
-// 	}
-
-// /*Dump our passing reads filter*/
-
-// ReportYAML<<"passing_reads:"<<std::endl;
-// for (int i =0; i < Passing_Reads.size(); ++i){
-// 	ReportYAML << "- ";
-// 	for (int j = 0; j <= args.max_quality_score; ++j){
-// 		ReportYAML << "- " << (double(Passing_Reads[i][j])/ read_counter) << std::endl ;
-// 		}
-// 	}
-
-// ReportYAML.close();
-
-// */
-
-/*
-Rfile script outputs
-*/
-
-/*cumulative qualitites*/
-std::ofstream R(args.R);
-R << "library(ggplot2)" << std::endl;
-R << "postscript(\""<< args.basename <<".qc.ps\", width=500, height=500)" << std::endl;
-R << "df <- data.frame(labels = c(" ;
-/*print out our labels*/
-std::string name = args.basename;
-name ="\"" + name + "\"";
-
-for (int j =0; j <= args.max_quality_score; ++j){
-	if (j < args.max_quality_score){
-		R<< name << ",";
-		}
-	else {
-		R << name << "),";
-		}
-	}
-	
-/*print out our x_values*/
-R << "x_label = factor(c(";
-for (int j = 0; j <= args.max_quality_score ; ++j){
-	if (j < args.max_quality_score){
-		R << j << ",";
-		}
-	else{
-		R << j<<")),";
-		}
-	}	
-/*print out our y_values*/
-R << "y_label = c(";
 unsigned long long current_seen = 0;
-for (int j = 0; j <= args.max_quality_score ; ++j){
+for ( int j = 0; j <=args.max_quality_score; ++j){
 	current_seen += Quals_Distribution[j];
-	if (j < args.max_quality_score){
-		R << (current_seen/total_seen) << ",";
+	cum_quals << args.basename <<"\t"<< j << "\t"<< (current_seen/total_seen) << std::endl;
+	} 
+cum_quals.close();
+
+std::ofstream stacked_bargraph(args.no_suffix+"_nucleotides_by_position.tbl");
+int read_length = NTs_ByPosition.size();
+stacked_bargraph << "position\tA\tT\tG\tC\tN\tlabel"<<std::endl;
+for (int i = 0; i < read_length; ++i){
+	stacked_bargraph << i+1 << "\t";
+	for (int j =0; j<5;++j){
+		stacked_bargraph<<(NTs_ByPosition[i][Nucleotides[j]]/ read_counter ) << "\t";
 		}
-	else{
-		R << (current_seen/total_seen) << "))" << std::endl;
-		}
+	stacked_bargraph<<args.basename<<std::endl;
 	}
-R << "ggplot(df, aes (x = x_label, y=y_label,color =labels,group =labels))";
-R << "+ geom_point()+geom_line() + ";
-R << "theme(axis.text.x = element_text(size=4,angle=90),plot.background = element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank())";
-R <<"+ ggtitle(\"Cumulative proportion of qualities" << std::endl;
-R << "for " << std::string(args.basename) <<"\")"<< +"+xlab(\"Quality Score\")+ylab(\"Cumulative Proportion\") + labs(color = \"sample\")"<<std::endl;
+stacked_bargraph.close();
 
-/*Stacked Bargraph*/
-std::string labels = "labels = c(";
-std::string enum_lab = "enum_lab=c(";
-std::string val_lab = "val_lab =c(";
-
-int read_lenght = NTs_ByPosition.size();
-
-for (int i = 0; i < read_lenght ; ++i){
-		/*val_lab = val_lab , Nucleotides[j] = enum_lab name = labels*/		
-		for (int j =0; j < 5; ++j){
-			if (i == read_lenght-1){
-				
-				if (Nucleotides[j] == 'N'){
-					enum_lab +="\"";
-					enum_lab += Nucleotides[j];
-					enum_lab +="\"),";
-
-					labels += std::to_string(i+1);
-					labels += "),";
-
-					val_lab += std::to_string(NTs_ByPosition[i][Nucleotides[j]]/ read_counter ) +")";
-					}
-				else{
-					enum_lab += "\"";
-					enum_lab +=Nucleotides[j];
-					enum_lab += +"\",";
-
-					labels += std::to_string(i+1); 
-					labels += ",";
-
-					val_lab += std::to_string(NTs_ByPosition[i][Nucleotides[j]]/ read_counter ) +",";
-					}
-
-				}
-			else{
-				labels += std::to_string(i+1);
-				labels += ",";
-
-				enum_lab += "\"";
-				enum_lab += Nucleotides[j];
-				enum_lab +="\",";
-				
-				val_lab += std::to_string(NTs_ByPosition[i][Nucleotides[j]]/ read_counter ) +",";
-				}
- 		}
-
-	}
-
-R<<"df2 <- data.frame(" << labels << enum_lab << val_lab <<")"<<std::endl;
-R << "ggplot(df2, aes (x = labels, y=val_lab ,fill = enum_lab))";
-R << "+geom_bar(stat=\"identity\",linetype=\"blank\")";
-R << "+theme(axis.text.x = element_text(size=4,angle=90),plot.background = element_blank(),panel.grid.major = element_blank()";
-R << ",panel.grid.minor = element_blank(),panel.background = element_blank()) ";
-R << "+ ggtitle(\"Nucleotide Distribution for "<< args.basename <<"\") ";
-R << " +xlab(\"Position\")+ylab(\"Proportion\")+labs(fill = \"Nucleotide Class\")"	 << std::endl;
-
-
-
-/*violin plot qualities by position*/
-std::string y_axis  = "y_label = c(";
-std::string x_axis  = "x_label = factor(c(";
-std::string y_value = "y_weights = c(";
-std::string label   = "labels = c(";
-
+std::ofstream violin_plot(args.no_suffix+"_quality_distribution.tbl");
 int quals_length = Quals_ByPosition.size();
-/*data fram expansion*/
+violin_plot << "xlabel\tylabel\ty_weignt\tlabel"<<std::endl;
 for (int i = 0; i < quals_length ; ++i){	
-		for (int j = 0; j < args.max_quality_score+1; ++j){
-			if (i  == quals_length -1 ){
-				if (j == args.max_quality_score){
-					label += name;
-					label += ")";
-					
-					x_axis += std::to_string(i+1);
-					x_axis += "))";
-
-					y_axis += std::to_string(j);
-					y_axis += ")";
-
-					y_value += std::to_string(Quals_ByPosition[i][j] / read_counter );
-					y_value += ")";
-					}
-				else{
-					label += name;
-					label += ",";
-					
-					x_axis += std::to_string(i+1);
-					x_axis += ",";
-
-					y_axis += std::to_string(j);
-					y_axis += ",";
-
-					y_value += std::to_string(Quals_ByPosition[i][j] / read_counter );
-					y_value += ",";
-					}
-				}
-			else{
-				label += name;
-				label += ",";
-				
-				x_axis += std::to_string(i+1);
-				x_axis += ",";
-
-				y_axis += std::to_string(j);
-				y_axis += ",";
-
-				y_value += std::to_string(Quals_ByPosition[i][j] / read_counter );
-				y_value += ",";		
-				}
- 		}
+	
+	for (int j = 0; j < args.max_quality_score+1; ++j){
+		violin_plot << i << "\t" << j <<"\t" << (Quals_ByPosition[i][j] / read_counter )<<"\t"<<args.basename<<std::endl;
+		}
 	}
 
+violin_plot.close();
 
-R << "df3 <- data.frame (" << x_axis << " , "<< y_axis << " , "<< y_value << " , "<< label <<")"<< std::endl;
-R <<  "ggplot(df3, aes(x= x_label,y=y_label,fill=labels, weight = y_weights)) ";
-R << "+ geom_violin(scale=\"count\",position=\"identity\",linetype=\"blank\") ";
-R << "+theme(axis.text.x = element_text(size=4,angle=90),plot.background= element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank())";
-R << "+ ggtitle(\"Quality Score Distributions by Position\")+ xlab(\"Position\") ";
-R << "+ ylab(\"Quality Scores\") + labs(\""<< args.basename <<"\")" << std::endl;
-
-
-
-
-/*passing reads dump*/
-std::string value = "value = c(";
-y_axis  = "y_label = factor(c(";
-x_axis  = "x_label = factor(c(";
-
+std::ofstream passing_reads(args.no_suffix+"passing_reads.tbl");
 int passing_reads_size = Passing_Reads.size();
 
-for (int i =0; i < passing_reads_size; ++i){
-	for (int j = 0; j <= args.max_quality_score; ++j){
-		if (Passing_Reads[i][j] == 0){
-			value+= "NA";
-			}
-		else{
-			value += std::to_string(Passing_Reads[i][j]/read_counter);
-			}
-		x_axis+=std::to_string(i+1);
-		y_axis+=std::to_string(j);
+passing_reads<<"xlabel\tylabel\tvalue" << std::endl;
 
-		if (i == passing_reads_size-1){
-			if (j == args.max_quality_score ){
-				y_axis+="))";
-				x_axis += "))";
-				value+=")";
-				}
-			else{
-				y_axis+=",";
-				x_axis += ",";	
-				value+=",";
-				}
+
+for (int x =0; x < passing_reads_size; ++x){
+	for (int y = 0; y <= args.max_quality_score; ++y){
+		if ((Passing_Reads[x][y]/read_counter) == 0){
+			passing_reads<< x+1 << "\t" << y <<"\t"<<"N/A"<<std::endl;
 			}
 		else{
-			y_axis+=",";
-			x_axis += ",";
-			value+=",";
-			}			
+			passing_reads<< x+1 << "\t" << y <<"\t"<<(Passing_Reads[x][y]/read_counter)<<std::endl;
+			}
+	
 		}
 	}
+passing_reads.close();
+// R<<"df2 <- data.frame(" << labels << enum_lab << val_lab <<")"<<std::endl;
+// R << "ggplot(df2, aes (x = labels, y=val_lab ,fill = enum_lab))";
+// R << "+geom_bar(stat=\"identity\",linetype=\"blank\")";
+// R << "+theme(axis.text.x = element_text(size=4,angle=90),plot.background = element_blank(),panel.grid.major = element_blank()";
+// R << ",panel.grid.minor = element_blank(),panel.background = element_blank()) ";
+// R << "+ ggtitle(\"Nucleotide Distribution for "<< args.basename <<"\") ";
+// R << " +xlab(\"Position\")+ylab(\"Proportion\")+labs(fill = \"Nucleotide Class\")"	 << std::endl;
 
 
-R << "df4 <- data.frame (" << x_axis << " , "<< y_axis << " , "<< value <<")"<< std::endl;
-R << "ggplot(df4, aes(x = x_label, y = y_label)) + geom_tile(aes(fill = value)) ";
-R << " + scale_fill_gradient(low=\"steelblue\", high=\"white\")+theme(axis.text.x = element_text(size=4,angle=90),plot.background = element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank())";
-R << " + ggtitle(\"Passing reads for "<<args.basename<<"\") ";
-R << "  + ylab(\"Minimum Quality Score\")+xlab(\"Number of bases >= Minimum Quality\")";
-R << " +labs(fill = \"Proportion of Reads\")" << std::endl;
+
+
+
+// R << "df3 <- data.frame (" << x_axis << " , "<< y_axis << " , "<< y_value << " , "<< label <<")"<< std::endl;
+// R <<  "ggplot(df3, aes(x= x_label,y=y_label,fill=labels, weight = y_weights)) ";
+// R << "+ geom_violin(scale=\"count\",position=\"identity\",linetype=\"blank\") ";
+// R << "+theme(axis.text.x = element_text(size=4,angle=90),plot.background= element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank())";
+// R << "+ ggtitle(\"Quality Score Distributions by Position\")+ xlab(\"Position\") ";
+// R << "+ ylab(\"Quality Scores\") + labs(\""<< args.basename <<"\")" << std::endl;
+
+
+
+
+
+
+// R << "df4 <- data.frame (" << x_axis << " , "<< y_axis << " , "<< value <<")"<< std::endl;
+// R << "ggplot(df4, aes(x = x_label, y = y_label)) + geom_tile(aes(fill = value)) ";
+// R << " + scale_fill_gradient(low=\"steelblue\", high=\"white\")+theme(axis.text.x = element_text(size=4,angle=90),plot.background = element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank())";
+// R << " + ggtitle(\"Passing reads for "<<args.basename<<"\") ";
+// R << "  + ylab(\"Minimum Quality Score\")+xlab(\"Number of bases >= Minimum Quality\")";
+// R << " +labs(fill = \"Proportion of Reads\")" << std::endl;
 
 
 return 0;
