@@ -156,6 +156,7 @@ long double read_counter = 0;
 std::unordered_map<int, std::unordered_map<int,unsigned long long>> Passing_Reads;
 std::unordered_map<std::string,int> Sequence_Representation;
 
+std::cout << args.basename << " started!" << std::endl;
 while ((l = kseq_read(records)) >=0){
  	// we have records;
 
@@ -239,7 +240,7 @@ passing_reads<<"xlabel\tylabel\tvalue" << std::endl;
 for (int x =0; x < passing_reads_size; ++x){
 	for (int y = 0; y <= args.max_quality_score; ++y){
 		if ((Passing_Reads[x][y]/read_counter) == 0){
-			passing_reads<< x+1 << "\t" << y <<"\t-1"<<std::endl;
+			passing_reads<< x+1 << "\t" << y <<"\tNA"<<std::endl;
 			}
 		else{
 			passing_reads<< x+1 << "\t" << y <<"\t"<<(Passing_Reads[x][y]/read_counter)<<std::endl;
@@ -318,6 +319,7 @@ R << "+ylab (\"Number of reads in category\")+xlab(\"Uniqueness score\")"<<std::
 
 R.close();
 
+std::cout << args.basename << " completed!" << std::endl;
 
 
 
