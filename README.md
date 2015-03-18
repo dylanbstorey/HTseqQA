@@ -52,3 +52,6 @@ Passing Reads Filter
 --------------------
 ![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.prf.png)
 
+Sequence Uniqueness
+--------------------
+![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.novelty.png)
