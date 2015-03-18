@@ -39,17 +39,17 @@ On a standard computer we're able to process 4000+ files over night.
 
 Cumulative Quality Scores
 --------------------------
-![Cumulative Quality Scores Graph](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/C1ln3SF_NIcont_1.cqs.png)
+![Cumulative Quality Scores Graph](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.cqs.ps)
 
 Nucleotide Proportions
 ---------------------------
-![Nucleotide Proportions](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/C1ln3SF_NIcont_1.ntd.png)
+![Nucleotide Proportions](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.ntbps.ps)
 
 Quality Distributions by Position
 ----------------------------------
-![Quality Distributions by Position](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/C1ln3SF_NIcont_1.qbp.png)
+![Quality Distributions by Position](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.qdbs.ps)
 
 Passing Reads Filter
 --------------------
-![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/C1ln3SF_NIcont_1.prf.png)
+![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/tst.prf.ps)
 
