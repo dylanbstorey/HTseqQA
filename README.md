@@ -1,9 +1,8 @@
 
+[![DOI](https://zenodo.org/badge/11062/dylanstorey/HTseqQA.svg)](http://dx.doi.org/10.5281/zenodo.16172)
 TODO:
 ======
-- Add flag and code for producing YAML dumps of the files.
 - Sequence representation proportions and graphs.
-- Clean up the passing reads filter graph so undef isn't 0
 
 
 
@@ -39,17 +38,17 @@ On a standard computer we're able to process 4000+ files over night.
 
 Cumulative Quality Scores
 --------------------------
-![Cumulative Quality Scores Graph](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.cqs.ps)
+![Cumulative Quality Scores Graph](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.cqs.png)
 
 Nucleotide Proportions
 ---------------------------
-![Nucleotide Proportions](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.ntbps.ps)
+![Nucleotide Proportions](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.ntbps.png)
 
 Quality Distributions by Position
 ----------------------------------
-![Quality Distributions by Position](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.qdbs.ps)
+![Quality Distributions by Position](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.qdbs.png)
 
 Passing Reads Filter
 --------------------
-![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/tst.prf.ps)
+![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.prf.png)
 
