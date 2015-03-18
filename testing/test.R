@@ -12,3 +12,6 @@ ggplot(df3, aes(x= factor(xlabel),y=ylabel,fill=label, weight = y_weight)) + geo
 postscript("test.prf.ps", width=2000, height=2000)
 df4 <- as.data.frame(read.table("test_passing_reads.tbl",header=TRUE))
 ggplot(df4, aes(x = xlabel, y = ylabel , fill = value)) + geom_tile(aes(fill = value))  + scale_fill_gradient(low="steelblue", high="white")+theme(axis.text.x = element_text(size=4,angle=90),plot.background = element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank()) + ggtitle("Passing reads for test")   + ylab("Minimum Quality Score")+xlab("Number of bases >= Minimum Quality") +labs(fill = "Proportion of Reads")
+postscript("test.novelty.ps", width=2000, height=2000)
+df5 <- as.data.frame(read.table("test_novelty.tbl",header=TRUE))
+ggplot(df5, aes(x=novelty,y=count))+geom_histogram(stat="identity")+ggtitle("Uniqueness of reads for test")+ylab ("Number of reads in category")+xlab("Uniqueness score")

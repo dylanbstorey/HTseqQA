@@ -154,7 +154,7 @@ std::unordered_map <int, std::unordered_map<int , unsigned long long>> Quals_ByP
 std::unordered_map<int, unsigned long long> Quals_Distribution;
 long double read_counter = 0;
 std::unordered_map<int, std::unordered_map<int,unsigned long long>> Passing_Reads;
-
+std::unordered_map<std::string,int> Sequence_Representation;
 
 while ((l = kseq_read(records)) >=0){
  	// we have records;
@@ -162,7 +162,7 @@ while ((l = kseq_read(records)) >=0){
  	std::string header = records->name.s;
  	std::string sequence = records-> seq.s;
  	std::string quals = records->qual.s;
- 	
+ 	Sequence_Representation[sequence]++;
  	/*process reads*/
  	read_counter++;
  	int end = sequence.size();
@@ -249,11 +249,30 @@ for (int x =0; x < passing_reads_size; ++x){
 	}
 passing_reads.close();
 
+std::ofstream novelty(args.no_suffix+"_novelty.tbl");
+std::unordered_map <int , int> novelty_box;
+for (auto sequence : Sequence_Representation){
+	novelty_box[sequence.second]++;
+	}
+
+novelty << "novelty\tcount" << std::endl;
+
+for (auto bin :  novelty_box){
+	novelty << bin.first << "\t"<< bin.second << std::endl;
+	}
+
+novelty.close();
+
+
+
+
 std::ofstream R(args.R);
+
 std::string cum_quals_file_name = std::string(args.basename)+"_cum_quals.tbl"; 
 std::string stacked_bargraph_file_name = std::string(args.basename)+"_nucleotides_by_position.tbl";
 std::string violin_file_name = std::string(args.basename)+"_quality_distribution.tbl";
 std::string passing_reads_file_name = std::string(args.basename)+"_passing_reads.tbl"; 
+std::string novelty_file_name = std::string(args.basename)+"_novelty.tbl";
 
 R << "library(ggplot2)" << std::endl;
 R << "postscript(\""<< args.basename <<".cqs.ps\", width=2000, height=2000)" << std::endl;
@@ -291,10 +310,13 @@ R << " + ggtitle(\"Passing reads for "<<args.basename<<"\") ";
 R << "  + ylab(\"Minimum Quality Score\")+xlab(\"Number of bases >= Minimum Quality\")";
 R << " +labs(fill = \"Proportion of Reads\")" << std::endl;
 
+R << "postscript(\""<< args.basename <<".novelty.ps\", width=2000, height=2000)" << std::endl;
+R << "df5 <- as.data.frame(read.table(\""<<novelty_file_name<<"\",header=TRUE))"<<std::endl;
+R << "ggplot(df5, aes(x=novelty,y=count))+geom_histogram(stat=\"identity\")+ggtitle(\"Uniqueness of reads for "<< args.basename << "\")";
+R << "+ylab (\"Number of reads in category\")+xlab(\"Uniqueness score\")"<<std::endl;
 
 
 R.close();
-
 
 
 
