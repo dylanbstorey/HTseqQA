@@ -1,9 +1,8 @@
 
+[![DOI](https://zenodo.org/badge/11062/dylanstorey/HTseqQA.svg)](http://dx.doi.org/10.5281/zenodo.16172)
 TODO:
 ======
-- Add flag and code for producing YAML dumps of the files.
 - Sequence representation proportions and graphs.
-- Clean up the passing reads filter graph so undef isn't 0
 
 
 
