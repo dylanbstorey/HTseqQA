@@ -51,5 +51,5 @@ Quality Distributions by Position
 
 Passing Reads Filter
 --------------------
-![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/tst.prf.png)
+![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.prf.png)
 
