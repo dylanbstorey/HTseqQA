@@ -156,6 +156,7 @@ long double read_counter = 0;
 std::unordered_map<int, std::unordered_map<int,unsigned long long>> Passing_Reads;
 std::unordered_map<std::string,int> Sequence_Representation;
 
+std::cout << "Offset: " << args.offset << std::endl;
 std::cout << args.basename << " started!" << std::endl;
 while ((l = kseq_read(records)) >=0){
  	// we have records;
