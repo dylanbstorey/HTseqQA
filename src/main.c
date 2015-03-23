@@ -1,5 +1,5 @@
 /*
- * untitled.c
+ * HTseqQA
  * 
  * Copyright 2014 Dylan Storey <dstorey@optimus>
  * 
@@ -325,7 +325,7 @@ void generate_report (){
 	R << "df3 <- as.data.frame(read.table(\""<<violin_file_name<<"\",header=TRUE))"<<std::endl;
 	R <<  "ggplot(df3, aes(x= factor(xlabel),y=ylabel,fill=label, weight = y_weight)) ";
 	R << "+ geom_violin(scale=\"count\",position=\"identity\",linetype=\"blank\") ";
-	R << "+theme(axis.text.x = element_text(angle=90),plot.background= element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank())";
+	R << "+theme(axis.text.x = element_text(size = 5, angle=90),plot.background= element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank())";
 	R << "+ ggtitle(\"Quality Score Distributions by Position\")+ xlab(\"Position\") ";
 	R << "+ ylab(\"Quality Scores\") + labs(\""<< args.basename <<"\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=1))" << std::endl;
 
