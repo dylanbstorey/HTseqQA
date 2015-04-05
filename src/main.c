@@ -276,16 +276,7 @@ for (auto bin :  novelty_box){
 
 novelty.close();
 
-
-
-
-
-
-
-
-// R << "df4 <- data.frame (" << x_axis << " , "<< y_axis << " , "<< value <<")"<< std::endl;
-
-
+generate_report();
 return 0;
 }
 
