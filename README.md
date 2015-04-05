@@ -1,9 +1,6 @@
 
-[![DOI](https://zenodo.org/badge/11062/dylanstorey/HTseqQA.svg)](http://dx.doi.org/10.5281/zenodo.16172)
-TODO:
-======
-- Sequence representation proportions and graphs.
 
+[![DOI](https://zenodo.org/badge/11062/dylanstorey/HTseqQA.svg)](http://dx.doi.org/10.5281/zenodo.16281)
 
 
 HTseqQA
