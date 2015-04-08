@@ -293,46 +293,50 @@ void generate_report (){
 	std::string novelty_file_name = std::string(args.basename)+"_novelty.tbl";
 
 	R << "library(ggplot2)" << std::endl;
-	R << "postscript(\""<< args.basename <<".cqs.ps\", width=2000, height=2000)" << std::endl;
+
 	R << "df <- as.data.frame(read.table(\""<<cum_quals_file_name<<"\",header=TRUE))"<<std::endl;
-	R << "ggplot(df, aes (x = xlabel, y=ylabel,color =label,group =label))";
+	R << "p <-ggplot(df, aes (x = xlabel, y=ylabel,color =label,group =label))";
 	R << "+ geom_point()+geom_line() + ";
 	R << "theme(axis.text.x = element_text(angle=90),plot.background = element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank())";
 	R <<"+ ggtitle(\"Cumulative proportion of qualities" << std::endl;
-	R << "for " << std::string(args.basename) <<"\")"<< +"+xlab(\"Quality Score\")+ylab(\"Cumulative Proportion\") + labs(color = \"sample\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=1))"<<std::endl;
+	R << "for " << std::string(args.basename) <<"\")"<< +"+xlab(\"Quality Score\")+ylab(\"Cumulative Proportion\") + labs(color = \"sample\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=0.25))"<<std::endl;
+	R << "ggsave(p,file=\"" << args.basename <<".cqs.ps\",dpi=600,width=7,height=5)"<<std::endl;
 
 
 
-	R << "postscript(\""<< args.basename <<".ntbps.ps\", width=2000, height=2000)" << std::endl;
 	R << "df2 <- as.data.frame(read.table(\""<<stacked_bargraph_file_name<<"\",header=TRUE))"<<std::endl;
-	R << "ggplot(df2, aes (x = position, y=value ,fill = nucleotide))";
+	R << "p <- ggplot(df2, aes (x = position, y=value ,fill = nucleotide))";
 	R << "+geom_bar(stat=\"identity\",linetype=\"blank\")";
 	R << "+theme(axis.text.x = element_text(angle=90),plot.background = element_blank(),panel.grid.major = element_blank()";
 	R << ",panel.grid.minor = element_blank(),panel.background = element_blank()) ";
 	R << "+ ggtitle(\"Nucleotide Distribution for "<< args.basename <<"\") ";
-	R << " +xlab(\"Position\")+ylab(\"Proportion\")+labs(fill = \"Nucleotide Class\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=1))"	 << std::endl;
+	R << " +xlab(\"Position\")+ylab(\"Proportion\")+labs(fill = \"Nucleotide Class\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=0.25))"	 << std::endl;
+	R << "ggsave(p,file=\"" << args.basename <<".ntbps.ps\",dpi=600,width=7,height=5)"<<std::endl;
 
-	R << "postscript(\""<< args.basename <<".qdbs.ps\", width=2000, height=2000)" << std::endl;
+
+
 	R << "df3 <- as.data.frame(read.table(\""<<violin_file_name<<"\",header=TRUE))"<<std::endl;
-	R <<  "ggplot(df3, aes(x= factor(xlabel),y=ylabel,fill=label, weight = y_weight)) ";
+	R <<  "p <- ggplot(df3, aes(x= factor(xlabel),y=ylabel,fill=label, weight = y_weight)) ";
 	R << "+ geom_violin(scale=\"count\",position=\"identity\",linetype=\"blank\") ";
 	R << "+theme(axis.text.x = element_text(size = 5, angle=90),plot.background= element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank())";
 	R << "+ ggtitle(\"Quality Score Distributions by Position\")+ xlab(\"Position\") ";
-	R << "+ ylab(\"Quality Scores\") + labs(\""<< args.basename <<"\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=1))" << std::endl;
+	R << "+ ylab(\"Quality Scores\") + labs(\""<< args.basename <<"\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=0.25))" << std::endl;
+	R << "ggsave(p,file=\"" << args.basename <<".qdbs.ps\",dpi=600,width=7,height=5)"<<std::endl;
 
-	R << "postscript(\""<< args.basename <<".prf.ps\", width=2000, height=2000)" << std::endl;
+
 	R << "df4 <- as.data.frame(read.table(\""<<passing_reads_file_name<<"\",header=TRUE))"<<std::endl;
-	R << "ggplot(df4, aes(x = xlabel, y = ylabel , fill = value)) + geom_tile(aes(fill = value)) ";
+	R << "p <- ggplot(df4, aes(x = xlabel, y = ylabel , fill = value)) + geom_tile(aes(fill = value)) ";
 	R << " + scale_fill_gradient(low=\"steelblue\", high=\"white\")+theme(axis.text.x = element_text(angle=90),plot.background = element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank())";
 	R << " + ggtitle(\"Passing reads for "<<args.basename<<"\") ";
 	R << "  + ylab(\"Minimum Quality Score\")+xlab(\"Number of bases >= Minimum Quality\")";
-	R << " +labs(fill = \"Proportion of Reads\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=1))" << std::endl;
+	R << " +labs(fill = \"Proportion of Reads\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=0.25))" << std::endl;
+	R << "ggsave(p,file=\"" << args.basename <<".prf.ps\",dpi=600,width=7,height=5)"<<std::endl;
 
 	R << "postscript(\""<< args.basename <<".novelty.ps\", width=2000, height=2000)" << std::endl;
 	R << "df5 <- as.data.frame(read.table(\""<<novelty_file_name<<"\",header=TRUE))"<<std::endl;
-	R << "ggplot(df5, aes(x=novelty,y=count))+geom_histogram(stat=\"identity\")+ggtitle(\"Uniqueness of reads for "<< args.basename << "\")";
-	R << "+ylab (\"Number of reads in category\")+xlab(\"Uniqueness score\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=1))"<<std::endl;
-
+	R << "p <- ggplot(df5, aes(x=novelty,y=count))+geom_histogram(stat=\"identity\")+ggtitle(\"Uniqueness of reads for "<< args.basename << "\")";
+	R << "+ylab (\"Number of reads in category\")+xlab(\"Uniqueness score\")+ theme(axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=0.25))"<<std::endl;
+	R << "ggsave(p,file=\"" << args.basename <<".novelty.ps\",dpi=600,width=7,height=5)"<<std::endl;
 
 	R.close();
 
