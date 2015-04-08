@@ -11,7 +11,7 @@ LINK := $(CPP)
 
 MODULES := src include 
 
-CFLAGS := -O3 -fopenmp
+CFLAGS := -O3
 LFLAGS := -O3 
 DEPFLAGS := -O3 
 

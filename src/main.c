@@ -98,7 +98,11 @@ static const char *optString = "i:ho:rg";
 
 // Usage statement//
 void usage(){
-	std::cout << "./fastqcreport -i fastq" << std::endl;
+	std::cout << "./fastqcreport -i <fastq> " << std::endl;
+	std::cout << "Options : " << std::endl;
+	std::cout << "\t -o <offset> , manually set your offset" << std::endl;
+	std::cout << "\t -r , Only print out the Rscript" << std::endl;
+	std::cout << "\t -g , Set graphs for grey scale only" << std::endl;
 	return;
 	}
 

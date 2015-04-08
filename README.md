@@ -21,17 +21,23 @@ Usage:
 
 `./HTseqQA <options> -i <fastq or gzip'd fastq> `
 
-You can set the phred offset manually :
+Other options
 
-`./HTseqQA -o <64|33> -i test.fastq.gz`
+`-o <int> , manually set the offset`
 
-The output is a text file with an extension of '.R' and run through R to get your graph out.
+`-r , Only print out the Rscript for figure generation`
+
+`-g , Creat a greyscale version of graphs`
 
 If you need to be running many files I suggest using parallel:
 
 `parallel HTseqQA -i {} ::: /path/to/all/*.fastqs`
 
-On a standard computer we're able to process 4000+ files over night. 
+On a standard computer we're able to process 4000+ files for bacterial genomes over night. 
+
+Read Counts
+-----------
+Simple text file that tells you the number of reads seen.
 
 Cumulative Quality Scores
 --------------------------
@@ -52,3 +58,7 @@ Passing Reads Filter
 Sequence Uniqueness
 --------------------
 ![Passing Reads Filter](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.novelty.png)
+
+Read GC Content Distrubution
+----------------------------
+![GC Content Distribution](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.gcdist.png)
