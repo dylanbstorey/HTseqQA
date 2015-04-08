@@ -51,14 +51,15 @@ struct args_t{
 	int offset = -1;
 	int max_quality_score = -1;
 	/*outputs*/
-
+	int report_only = 0;
+	int greyscale = 0;
+	int force = 0;
 	/*file paths*/
 	std::string report; //yaml report
 	std::string R; // R report
 	std::string basename; // basename + no suffix
 	std::string no_suffix;
-	int report_only = 0;
-	int greyscale = 0;
+
 	}args;
 
 
@@ -94,15 +95,16 @@ int get_offset(char* file){
 
 
 // Strign for opt_arg
-static const char *optString = "i:ho:rg";
+static const char *optString = "i:ho:rgf";
 
 // Usage statement//
 void usage(){
-	std::cout << "./fastqcreport -i <fastq> " << std::endl;
+	std::cout << "./HTseqQA -i <fastq> " << std::endl;
 	std::cout << "Options : " << std::endl;
 	std::cout << "\t -o <offset> , manually set your offset" << std::endl;
 	std::cout << "\t -r , Only print out the Rscript" << std::endl;
 	std::cout << "\t -g , Set graphs for grey scale only" << std::endl;
+	std::cout << "\t -f , Force the re run if tables already exist" << std::endl;
 	return;
 	}
 
@@ -138,6 +140,9 @@ while (opt != -1){
 		case 'g':
 			args.greyscale = 1;
 			break;
+		case 'f':
+			args.force = 1;
+			break;
 		default:
 			usage();
 			exit(200);
@@ -146,6 +151,15 @@ while (opt != -1){
 	opt = getopt(argc,argv,optString);
 	}	
 
+if (args.force == 0){
+	/*try to open a file*/
+	std::string file = args.no_suffix+"_gcdistributions.tbl";
+	std::ifstream lastOutput(file);
+	if (lastOutput){
+		std::cerr<< args.basename << " appears to have been processed already, use -f to re-write tables" <<std::endl;
+		exit(1);
+		}
+	}
 
 if (args.report_only > 0){
 	if (args.greyscale){
