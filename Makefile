@@ -11,9 +11,9 @@ LINK := $(CPP)
 
 MODULES := src include 
 
-CFLAGS := -O3
-LFLAGS := -O3 
-DEPFLAGS := -O3 
+CFLAGS := -O2
+LFLAGS := -O2 
+DEPFLAGS := -O2
 
 ifdef DEBUG
 CFLAGS := -g 

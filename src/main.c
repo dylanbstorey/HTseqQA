@@ -395,6 +395,10 @@ void generate_report_gs(){
 	R << "+ylab (\"Number of reads in category\")+xlab(\"Uniqueness score\")+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank(),plot.background= element_blank(),axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=0.25))"<<std::endl;
 	R << "ggsave(p,file=\"" << args.basename <<".novelty.ps\",dpi=600,width=7,height=5)"<<std::endl;
 
+	R << "p <- ggplot(df5, aes(x=novelty,y=count),position=dodge)+geom_histogram(stat=\"identity\")+ggtitle(\"Uniqueness of reads for "<< args.basename << "\")";
+	R << "+ylab (\"Number of reads in category\")+xlab(\"Uniqueness score\")+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank(),plot.background= element_blank(),axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=0.25)) + scale_x_continuous(limits=c(0, 15))"<<std::endl;
+	R << "ggsave(p,file=\"" << args.basename <<".novelty_zoom.ps\",dpi=600,width=7,height=5)"<<std::endl;
+
 	R << "df6 <- as.data.frame(read.table(\""<<gcdistribution_file_name<<"\",header=TRUE))"<<std::endl;
 	R << "p <- ggplot(df6, aes(x=GC,y=count),position=dodge)+geom_histogram(stat=\"identity\")+ggtitle(\"Read GC content distribution for "<< args.basename << "\")";
 	R << "+ylab (\"Number of reads\")+xlab(\"Read GC content\")+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank(),plot.background= element_blank(),axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=0.25))"<<std::endl;
@@ -462,6 +466,13 @@ void generate_report(){
 	R << "p <- ggplot(df5, aes(x=novelty,y=count),position=dodge)+geom_histogram(stat=\"identity\")+ggtitle(\"Uniqueness of reads for "<< args.basename << "\")";
 	R << "+ylab (\"Number of reads in category\")+xlab(\"Uniqueness score\")+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank(),plot.background= element_blank(),axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=0.25))"<<std::endl;
 	R << "ggsave(p,file=\"" << args.basename <<".novelty.ps\",dpi=600,width=7,height=5)"<<std::endl;
+
+	R << "p <- ggplot(df5, aes(x=novelty,y=count),position=dodge)+geom_histogram(stat=\"identity\")+ggtitle(\"Uniqueness of reads for "<< args.basename << "\")";
+	R << "+ylab (\"Number of reads in category\")+xlab(\"Uniqueness score\")+ theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),panel.background = element_blank(),plot.background= element_blank(),axis.text.x = element_text(colour=\"black\"), axis.text.y = element_text(colour=\"black\") , axis.title.x= element_text(vjust=-0.5) , axis.title.y= element_text(vjust=0.25)) + scale_x_continuous(limits=c(0, 15))"<<std::endl;
+	R << "ggsave(p,file=\"" << args.basename <<".novelty_zoom.ps\",dpi=600,width=7,height=5)"<<std::endl;
+
+
+
 
 	R << "df6 <- as.data.frame(read.table(\""<<gcdistribution_file_name<<"\",header=TRUE))"<<std::endl;
 	R << "p <- ggplot(df6, aes(x=GC,y=count),position=dodge)+geom_histogram(stat=\"identity\")+ggtitle(\"Read GC content distribution for "<< args.basename << "\")";
