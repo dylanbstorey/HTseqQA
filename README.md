@@ -45,7 +45,7 @@ Cumulative Quality Scores
 
 Nucleotide Proportions
 ---------------------------
-![Nucleotide Proportions](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.ntbps.png)
+![Nucleotide Proportions](https://github.com/dylanstorey/HTseqQA/blob/master/documentation/test.nt.png)
 
 Quality Distributions by Position
 ----------------------------------
