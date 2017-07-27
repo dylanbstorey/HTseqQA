@@ -1,6 +1,6 @@
 
 
-[![DOI](https://zenodo.org/badge/19239/dylanstorey/HTseqQA.svg)](https://zenodo.org/badge/latestdoi/19239/dylanstorey/HTseqQA)
+[![DOI](https://zenodo.org/badge/29501140.svg)](https://zenodo.org/badge/latestdoi/29501140)
 
 
 HTseqQA
